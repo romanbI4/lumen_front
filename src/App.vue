@@ -1,16 +1,20 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <AuthorizationComponent/>
+  <CompaniesComponent/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import './scss/app.scss'
+import AuthorizationComponent from './components/AuthorizationComponent.vue'
+import CompaniesComponent from "./components/CompaniesComponent";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    AuthorizationComponent,
+    CompaniesComponent,
+  },
+
 }
 </script>
 
