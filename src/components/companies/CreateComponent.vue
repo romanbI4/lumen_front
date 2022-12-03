@@ -1,41 +1,35 @@
 <template>
-  <table class="table">
-    <thead>
-    <tr>
-      <th v-for="column in columns" :key="column.id">
-        {{column}}
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr >
-      <td>
-
-      </td>
-      <td>
-
-      </td>
-      <td>
-
-      </td>
-      <td>
-
-      </td>
-      <td>
-
-      </td>
-      <td>
-
-      </td>
-      <td>
-        <a href="#!" @click="restore(index)" class="btn"><i class="material-icons">restore</i>
-        </a>
-        <a href="#!" @click="deplete(index)" class="btn"><i class="material-icons">delete</i>
-        </a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <div>
+    <h2>Create company</h2>
+    <form @submit.prevent="handleSubmit()">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" v-model="title" name="title" class="form-control" autocomplete="on"
+               :class="{ 'is-invalid': submitted && !title }"/>
+        <div v-show="submitted && !title" class="invalid-feedback">Title is required</div>
+        <span v-if="error.title" class="alert alert-danger">{{ error.title }}</span>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="text" v-model="phone" name="phone" class="form-control" autocomplete="on"
+               :class="{ 'is-invalid': submitted && !phone }"/>
+        <div v-show="submitted && !phone" class="invalid-feedback">Phone is required</div>
+        <span v-if="error.phone" class="alert alert-danger">{{ error.phone }}</span>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" v-model="description" name="description" class="form-control" autocomplete="on"
+               :class="{ 'is-invalid': submitted && !description }"/>
+        <div v-show="submitted && !description" class="invalid-feedback">Description is required</div>
+        <span v-if="error.description" class="alert alert-danger">{{ error.description }}</span>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary" :disabled="loading">Create</button>
+        <img v-show="loading"
+             src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -50,7 +44,6 @@ export default {
       loading: false,
       description: "",
       error: "",
-      columns: ['ID', 'User ID', 'Title', 'Phone', 'Description', 'Created At', 'Updated At'],
     };
   },
   methods: {
@@ -70,17 +63,16 @@ export default {
       data.append("description", this.description);
 
       let config = {
-        method: 'post',
-        url: '/companies',
-        headers: {
-          'token': localStorage.getItem('token')
-        },
+        url: '/user/companies',
         data: data
       };
 
       client({ requiresAuth: true })
-          .post(config.url, config.data, config.headers)
-          .then(response => alert(response.data))
+          .post(config.url, config.data)
+          .then(response => {
+            alert(response.data.status);
+            this.$router.push('/companies');
+          })
           .catch(error => {
             //ToDo need refactor errors
             this.error = error.message;

@@ -3,6 +3,8 @@
     <router-link to="/login">Login</router-link>
     |
     <router-link to="/registration">Registration</router-link>
+    |
+    <router-link to="/companies/create">Create Company</router-link>
   </div>
   <router-view/>
 </template>

@@ -3,7 +3,7 @@ import axios from 'axios';
 export default ({ requiresAuth = false } = {}) => {
     const options = {};
 
-    options.baseURL = 'api';
+    options.baseURL = '/api';
 
     if (requiresAuth) {
         options.headers = {

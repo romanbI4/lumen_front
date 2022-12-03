@@ -2,7 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Login from '../components/LoginComponent.vue'
 import Registration from '../components/RegistationComponent.vue'
 import ListCompanies from '../components/companies/ListComponent.vue'
-import CreateCompanies from '../components/companies/CreateComponent.vue'
+import CreateCompany from '../components/companies/CreateComponent.vue'
 
 const routes = [
     {
@@ -29,8 +29,8 @@ const routes = [
     },
     {
         path: '/companies/create',
-        component: CreateCompanies,
-        name: 'CreateCompanies',
+        component: CreateCompany,
+        name: 'CreateCompany',
         meta: { requiresAuth: true },
     },
 ]

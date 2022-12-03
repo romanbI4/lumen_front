@@ -4,10 +4,12 @@ module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
     proxy: {
-      "api": {
-        target: 'http://lumen.loc:8084',
-        ws: true,
-        changeOrigin: true
+      '/api': {
+        target: 'http://lumen.loc:8084/api',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
       }
     }
   }
