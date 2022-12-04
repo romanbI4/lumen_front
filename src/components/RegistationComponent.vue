@@ -93,9 +93,9 @@ export default {
             alert(response.data.status)
             this.$router.push('/login')
           })
-          .catch(function (error) {
-            //ToDo need refactor errors
-            this.errors = error.message;
+          .catch(error => {
+            //ToDo need refactor
+            this.errors = error.response.data.data;
           });
 
       this.loading = false;

@@ -19,6 +19,9 @@
         {{company.title}}
       </td>
       <td>
+        {{company.phone}}
+      </td>
+      <td>
         {{company.description}}
       </td>
       <td>
@@ -28,9 +31,9 @@
         {{company.updated_at}}
       </td>
       <td>
-        <a href="#!" @click="restore(index)" class="btn"><i class="material-icons">restore</i>
+        <a :href="`/companies/${company.id}`" class="btn"><i class="material-icons">edit</i>
         </a>
-        <a href="#!" @click="deplete(index)" class="btn"><i class="material-icons">delete</i>
+        <a href="#" @click="deleteCompany(`${company.id}`);" class="btn"><i class="material-icons">delete</i>
         </a>
       </td>
     </tr>
@@ -45,12 +48,16 @@ export default {
   data() {
     return {
       loading: false,
-      error: "",
+      errors: "",
       columns: ['ID', 'User ID', 'Title', 'Phone', 'Description', 'Created At', 'Updated At'],
       companies: []
     };
   },
   mounted() {
+    this.getList()
+  },
+  methods: {
+    getList() {
       this.loading = true;
 
       let config = {
@@ -63,11 +70,22 @@ export default {
             this.companies = response.data.data
           })
           .catch(error => {
-            //ToDo need refactor errors
-            this.error = error.message;
+            this.errors = error.response.data;
           });
 
       this.loading = false;
+    },
+    deleteCompany(id) {
+      client({requiresAuth: true})
+          .delete(`/user/companies/${id}`)
+          .then(response => {
+            alert(response.data.status);
+            location.reload();
+          })
+          .catch(error => {
+            this.errors = error.response.data;
+          });
+    }
   }
 };
 

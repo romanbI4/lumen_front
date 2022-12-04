@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Create company</h2>
+    <h2>Edit company</h2>
     <form @submit.prevent="handleSubmit()">
       <div class="form-group">
         <label for="title">Title</label>
@@ -24,7 +24,7 @@
         <span v-if="errors.description" class="alert alert-danger">{{ errors.description }}</span>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" :disabled="loading">Create</button>
+        <button class="btn btn-primary" :disabled="loading">Edit</button>
         <img v-show="loading"
              src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
       </div>
@@ -44,9 +44,26 @@ export default {
       loading: false,
       description: "",
       errors: "",
+      data: []
     };
   },
+  mounted() {
+    this.getCompanyById();
+  },
   methods: {
+    getCompanyById() {
+      client({requiresAuth: true})
+          .get(`/user/companies/${this.$route.params.id}`)
+          .then(response => {
+            //ToDo need refactor
+            this.title = response.data.data.title;
+            this.phone = response.data.data.phone;
+            this.description = response.data.data.description;
+          })
+          .catch(error => {
+            this.errors = error.message;
+          });
+    },
     handleSubmit() {
       this.submitted = true;
       const {title, phone, description} = this;
@@ -57,18 +74,19 @@ export default {
 
       this.loading = true;
 
-      let data = new FormData();
-      data.append("title", this.title);
-      data.append("phone", this.phone);
-      data.append("description", this.description);
-
-      let config = {
-        url: '/user/companies',
-        data: data
+      this.data = {
+        'title': this.$data.title,
+        'phone': this.$data.phone,
+        'description': this.$data.description,
       };
 
-      client({ requiresAuth: true })
-          .post(config.url, config.data)
+      let config = {
+        url: `/user/companies/${this.$route.params.id}`,
+        data: this.data
+      }
+
+      client({requiresAuth: true})
+          .put(config.url, config.data)
           .then(response => {
             alert(response.data.status);
             this.$router.push('/companies');

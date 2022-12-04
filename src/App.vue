@@ -1,8 +1,11 @@
 <template>
   <div id="nav">
+    <!--ToDo need refactor-->
     <router-link to="/login">Login</router-link>
     |
     <router-link to="/registration">Registration</router-link>
+    |
+    <router-link to="/companies">List Companies</router-link>
     |
     <router-link to="/companies/create">Create Company</router-link>
   </div>

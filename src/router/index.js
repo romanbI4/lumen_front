@@ -3,6 +3,7 @@ import Login from '../components/LoginComponent.vue'
 import Registration from '../components/RegistationComponent.vue'
 import ListCompanies from '../components/companies/ListComponent.vue'
 import CreateCompany from '../components/companies/CreateComponent.vue'
+import EditCompany from "@/components/companies/EditComponent";
 
 const routes = [
     {
@@ -17,10 +18,12 @@ const routes = [
         component: Registration,
         meta: { guest: true },
     },
-    // {
-    //     path: '/companies/:id',
-    //     component: Companies
-    // },
+    {
+        path: '/companies/:id',
+        name: 'EditCompany',
+        component: EditCompany,
+        meta: { requiresAuth: true },
+    },
     {
         path: '/companies',
         component: ListCompanies,
