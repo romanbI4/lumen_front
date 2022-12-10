@@ -55,7 +55,6 @@ export default {
       client({requiresAuth: true})
           .get(`/user/companies/${this.$route.params.id}`)
           .then(response => {
-            //ToDo need refactor
             this.title = response.data.data.title;
             this.phone = response.data.data.phone;
             this.description = response.data.data.description;

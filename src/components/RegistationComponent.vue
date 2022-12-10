@@ -94,7 +94,6 @@ export default {
             this.$router.push('/login')
           })
           .catch(error => {
-            //ToDo need refactor
             this.errors = error.response.data.data;
           });
 

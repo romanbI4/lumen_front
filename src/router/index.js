@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Login from '../components/LoginComponent.vue'
 import Registration from '../components/RegistationComponent.vue'
+import ResetPassword from '../components/ResetPasswordComponent.vue'
 import Logout from '../components/LogoutComponent.vue'
 import ListCompanies from '../components/companies/ListComponent.vue'
 import CreateCompany from '../components/companies/CreateComponent.vue'
@@ -24,6 +25,15 @@ const routes = [
         path: '/registration',
         name: 'Registration',
         component: Registration,
+        meta: { requiresAuth: false },
+        beforeEnter: () => {
+            return !ifAuthenticated()
+        },
+    },
+    {
+        path: '/resetPassword',
+        name: 'ResetPassword',
+        component: ResetPassword,
         meta: { requiresAuth: false },
         beforeEnter: () => {
             return !ifAuthenticated()
